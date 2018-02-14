@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Omer Osman - Lab 1</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+</head>
+<body>
+	<h1>Twitter Ticker</h1>
+	<div id=masterdiv>		
+	</div>
+	<style type="text/css">
+		body{
+			background-color: lightblue;
+		}
+		img {
+			display: inline-block;
+			width: 5%;
+			border: 2px solid;
+    		border-radius: 50px;
+		}
+		.name {
+			display: inline-block;
+			width: 20%;
+		}
+		.text {
+			display: inline-block;
+			width: 70%;
+		}
+	</style>
+	<script type="text/javascript">
+		var x = 1;
+		function imgError(image) {
+	    	image.onerror = "";
+	   		image.src = "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png?w=1280";
+	    	return true;
+		};
+		function lab() {
+			$.getJSON('TwitterTweets17.json', function(data){
+				var j = 1;
+				$.each(data,function(i,f){
+					if (f.user != undefined) {
+						var tick = "<div id="+j+ "><img src="+f.user.profile_image_url_https+" onError=imgError(this);><h1 class=name>"+f.user.name+"</h1><h1 class=text>"+f.text+"</h1></div>";
+						$(tick).appendTo("#masterdiv");
+					}
+					else {
+						var tick = "<div id =" +j+ "><img src=https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png?w=1280><h1 class=name>unknown</h1><h1 class=text>"+f.text+"</h1></div>";
+						$(tick).appendTo("#masterdiv");
+					}
+					if (j < x || j > x+4){
+						$("#"+j).hide();
+					}
+					j++;
+				});
+			});
+		}
+		function refresh(){
+			$("#"+x).hide('slow');
+			if (x<100){
+				x = x+1;
+			}
+			else {
+				x = 1
+			}
+			$("#"+(x+4)).show('slow');
+		}
+		$(document).ready(function(){
+			lab();
+			setInterval(function(){refresh()},3000);
+		});
+	</script>
+</body>
+</html>

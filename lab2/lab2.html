@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Omer Osman - Lab 2</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	</head>
+	<body>
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(b);
+          }
+        }
+
+        function b(position){
+
+            var lati = position.coords.latitude;
+            var longi = position.coords.longitude;
+            $.getJSON("http://api.openweathermap.org/data/2.5/weather?lat="+lati+"&lon="+longi+"&units=imperial&APPID=18950ee23c2804e68b72ac12c3500d91", function(data) {
+                console.log(data);
+                $('#location').html(data.name);
+                $('#weather').html(Math.round(data.main.temp)+" &#8457;");
+                $('#condition').html(data.weather[0].description);
+                $('#image').html("<img src=http://openweathermap.org/img/w/"+data.weather[0].icon+".png>")
+                $('#high').html("High: "+Math.round(data.main.temp_max)+" &#8457;");
+                $('#low').html("Low: "+Math.round(data.main.temp_min)+" &#8457;");
+                $("#humidity").html("Humidity: "+Math.round(data.main.humidity)+"%");
+                $("#pressure").html("Pressure: "+Math.round(data.main.pressure)+" hPA");
+                $("#two").hide();
+            });
+        }
+
+        function toggle(){
+            $("#one").toggle();
+            $("#two").toggle();
+        }
+
+        $(document).ready(function(){
+            getLocation();
+            setInterval(function(){toggle()},5000);
+        });
+    </script>
+    <div id="container">
+        <div id="main">
+            <h1 id="location"></h1>
+            <h1 id="weather"></h1>
+        </div>
+        <div id="current">
+            <div id="image"></div>
+            <h1 id="condition"></h1>
+        </div>
+        <div id="one">
+            <h2 id="high"></h2>
+            <h2 id="low"></h2>
+        </div>
+        <div id="two">
+            <h2 id="humidity"></h2>
+            <h2 id="pressure"></h2>
+        </div>
+    </div>
+
+    <style type="text/css">
+        #container {
+            margin-top: 10%;
+            margin-right: 40%;
+            margin-left: 40%;
+            vertical-align: center;
+            background-color: lightblue;
+
+        }
+        body {
+        }
+        h1 {
+            display: block;
+        }
+        h2 {
+            text-align: center;
+        }
+        div {
+            text-align: center;
+        }
+        #condition {
+            text-transform: capitalize;
+        }
+        #image {
+            text-align: center;
+        }
+        
+    </style>
+
+
+	</body>
+</html>
